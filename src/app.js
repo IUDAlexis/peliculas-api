@@ -2,6 +2,12 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
+const mediaRoutes = require("./Routes/media.routes");
+const generoRoutes = require("./Routes/genero.routes");
+const directorRoutes = require("./Routes/director.routes");
+const productoraRoutes = require("./Routes/productora.routes");
+const tipoRoutes = require("./Routes/tipo.routes");
+
 // Inicializar aplicación
 const app = express();
 
@@ -16,13 +22,12 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json({ message: "API funcionando 🚀 con MongoDB Atlas" });
 });
-
 // Rutas de la API
-// app.use("/api/v1/generos", require("./routes/genero.routes"));
-// app.use("/api/v1/directores", require("./routes/director.routes"));
-// app.use("/api/v1/productoras", require("./routes/productora.routes"));
-// app.use("/api/v1/tipos", require("./routes/tipo.routes"));
-app.use("/api/v1/media", require("./Routes/media.routes"));
+app.use("/api/v1/generos", generoRoutes);
+// app.use("/api/v1/directores", directorRoutes);
+// app.use("/api/v1/productoras", productoraRoutes);
+// app.use("/api/v1/tipos", tipoRoutes);
+app.use("/api/v1/media", mediaRoutes);
 
 // Configuración del puerto y arranque del servidor
 const PORT = process.env.PORT || 4000;

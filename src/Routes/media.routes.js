@@ -1,5 +1,5 @@
 const express = require("express");
-const Media = require("../models/Media");
+const Media = require("../models/media");
 const router = express.Router();
 
 // GET todas

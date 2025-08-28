@@ -1,5 +1,5 @@
 const express = require("express");
-const Genero = require("../models/Genero");
+const Genero = require("../models/genero");
 const router = express.Router();
 
 // GET todos
