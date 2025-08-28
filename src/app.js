@@ -24,9 +24,9 @@ app.get("/", (req, res) => {
 });
 // Rutas de la API
 app.use("/api/v1/generos", generoRoutes);
-// app.use("/api/v1/directores", directorRoutes);
-// app.use("/api/v1/productoras", productoraRoutes);
-// app.use("/api/v1/tipos", tipoRoutes);
+app.use("/api/v1/directores", directorRoutes);
+app.use("/api/v1/productoras", productoraRoutes);
+app.use("/api/v1/tipos", tipoRoutes);
 app.use("/api/v1/media", mediaRoutes);
 
 // Configuración del puerto y arranque del servidor
