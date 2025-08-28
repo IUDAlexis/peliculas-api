@@ -153,28 +153,5 @@ router.delete("/:id", async (req, res) => {
   res.json(tipo);
 });
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     Tipo:
- *       type: object
- *       properties:
- *         nombre:
- *           type: string
- *           description: Nombre del tipo
- *         estado:
- *           type: string
- *           enum: [Activo, Inactivo]
- *           description: Estado del tipo
- *         fecha_creacion:
- *           type: string
- *           format: date-time
- *           description: Fecha de creación
- *         fecha_actualizacion:
- *           type: string
- *           format: date-time
- *           description: Fecha de actualización
- */
 
 module.exports = router;

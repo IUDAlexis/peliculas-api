@@ -16,7 +16,7 @@ const options = {
       },
     ],
   },
-  apis: ["./Routes/*.js"], // 👈 aquí van tus rutas documentadas
+  apis: ["./src/Routes/*.js", "./src/models/*.js"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

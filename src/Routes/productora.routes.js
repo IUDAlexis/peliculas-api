@@ -2,7 +2,31 @@ const express = require("express");
 const Productora = require("../models/productora");
 const router = express.Router();
 
-// GET todas las productoras
+/**
+ * @swagger
+ * tags:
+ *   name: Productoras
+ *   description: API para gestionar productoras de medios audiovisuales
+ */
+
+/**
+ * @swagger
+ * /productoras:
+ *   get:
+ *     summary: Obtener todas las productoras
+ *     tags: [Productoras]
+ *     responses:
+ *       200:
+ *         description: Lista de productoras
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Productora'
+ *       500:
+ *         description: Error del servidor
+ */
 router.get("/", async (req, res) => {
   try {
     const productoras = await Productora.find();
@@ -12,7 +36,31 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET por id
+/**
+ * @swagger
+ * /productoras/{id}:
+ *   get:
+ *     summary: Obtener una productora por ID
+ *     tags: [Productoras]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la productora
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Productora encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Productora'
+ *       404:
+ *         description: Productora no encontrada
+ *       500:
+ *         description: Error del servidor
+ */
 router.get("/:id", async (req, res) => {
   try {
     const productora = await Productora.findById(req.params.id);
@@ -25,7 +73,28 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST crear
+/**
+ * @swagger
+ * /productoras:
+ *   post:
+ *     summary: Crear una nueva productora
+ *     tags: [Productoras]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProductoraInput'
+ *     responses:
+ *       201:
+ *         description: Productora creada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Productora'
+ *       400:
+ *         description: Error en los datos de entrada
+ */
 router.post("/", async (req, res) => {
   try {
     const nuevaProductora = new Productora(req.body);
@@ -36,7 +105,37 @@ router.post("/", async (req, res) => {
   }
 });
 
-// PUT actualizar
+/**
+ * @swagger
+ * /productoras/{id}:
+ *   put:
+ *     summary: Actualizar una productora existente
+ *     tags: [Productoras]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la productora a actualizar
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProductoraInput'
+ *     responses:
+ *       200:
+ *         description: Productora actualizada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Productora'
+ *       404:
+ *         description: Productora no encontrada
+ *       400:
+ *         description: Error en los datos de entrada
+ */
 router.put("/:id", async (req, res) => {
   try {
     const productora = await Productora.findByIdAndUpdate(
@@ -53,7 +152,35 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// DELETE eliminar
+/**
+ * @swagger
+ * /productoras/{id}:
+ *   delete:
+ *     summary: Eliminar una productora
+ *     tags: [Productoras]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la productora a eliminar
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Productora eliminada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Eliminada correctamente"
+ *       404:
+ *         description: Productora no encontrada
+ *       500:
+ *         description: Error del servidor
+ */
 router.delete("/:id", async (req, res) => {
   try {
     const productora = await Productora.findByIdAndDelete(req.params.id);
@@ -65,5 +192,6 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 module.exports = router;

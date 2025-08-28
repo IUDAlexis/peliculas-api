@@ -2,16 +2,14 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
+const { swaggerUi, swaggerSpec } = require("./swagger");
+
 // Rutas
 const mediaRoutes = require("./Routes/media.routes");
 const generoRoutes = require("./Routes/genero.routes");
 const directorRoutes = require("./Routes/director.routes");
 const productoraRoutes = require("./Routes/productora.routes");
 const tipoRoutes = require("./Routes/tipo.routes");
-
-// Swagger
-const swaggerJSDoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
 
 // Inicializar aplicación
 const app = express();
@@ -24,22 +22,7 @@ app.use(cors());
 app.use(express.json());
 
 // Swagger configuración
-const swaggerOptions = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "API Películas",
-      version: "1.0.0",
-      description: "CRUD de Media, Géneros, Directores, Productoras y Tipos",
-    },
-    servers: [
-      { url: "http://localhost:4001/api/v1" }
-    ],
-  },
-  apis: ["./Routes/*.js"], // 👈 apunta a tus rutas
-};
 
-const swaggerSpec = swaggerJSDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Ruta raíz (prueba de conexión)
