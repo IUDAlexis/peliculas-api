@@ -9,4 +9,9 @@ const ProductoraSchema = new mongoose.Schema({
   descripcion: String
 });
 
+ProductoraSchema.pre("save", function (next) {
+  this.fecha_actualizacion = Date.now();
+  next();
+});
+
 module.exports = mongoose.model("Productora", ProductoraSchema);

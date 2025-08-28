@@ -7,4 +7,9 @@ const TipoSchema = new mongoose.Schema({
   descripcion: String
 });
 
+TipoSchema.pre("save", function (next) {
+  this.fecha_actualizacion = Date.now();
+  next();
+});
+
 module.exports = mongoose.model("Tipo", TipoSchema);

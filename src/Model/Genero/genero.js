@@ -8,4 +8,9 @@ const GeneroSchema = new mongoose.Schema({
   descripcion: { type: String }
 });
 
+GeneroSchema.pre("save", function (next) {
+  this.fecha_actualizacion = Date.now();
+  next();
+});
+
 module.exports = mongoose.model("Genero", GeneroSchema);

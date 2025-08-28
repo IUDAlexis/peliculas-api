@@ -15,4 +15,9 @@ const MediaSchema = new mongoose.Schema({
   tipo: { type: mongoose.Schema.Types.ObjectId, ref: "Tipo", required: true }
 });
 
+MediaSchema.pre("save", function (next) {
+  this.fecha_actualizacion = Date.now();
+  next();
+});
+
 module.exports = mongoose.model("Media", MediaSchema);
