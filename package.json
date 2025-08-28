@@ -4,6 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
+=======
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+>>>>>>> e0300e1 (Add .gitignore to exclude node_modules directory)
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,7 +16,13 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+<<<<<<< HEAD
     "express": "^5.1.0",
+=======
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "mongodb": "^6.19.0",
+>>>>>>> e0300e1 (Add .gitignore to exclude node_modules directory)
     "mongoose": "^8.18.0"
   },
   "devDependencies": {
