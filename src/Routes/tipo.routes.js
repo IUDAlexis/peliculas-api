@@ -142,16 +142,8 @@ router.put("/:id", async (req, res) => {
  *         description: Tipo no encontrado
  */
 router.delete("/:id", async (req, res) => {
-  const tipo = await Tipo.findByIdAndUpdate(
-    req.params.id,
-    { estado: "Inactivo" },
-    { new: true }
-  );
-  if (!tipo) {
-    return res.status(404).json({ message: "Tipo no encontrado" });
-  }
-  res.json(tipo);
+  await Tipo.findByIdAndDelete(req.params.id);
+  res.json({ message: "Eliminado correctamente" });
 });
-
 
 module.exports = router;
