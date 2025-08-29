@@ -25,7 +25,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Genero'
  */
-router.get("/", async (req, res) => {
+router.get("/", async (   req, res) => {
   const generos = await Genero.find();
   res.json(generos);
 });

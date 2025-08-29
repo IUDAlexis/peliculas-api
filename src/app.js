@@ -5,11 +5,11 @@ require("dotenv").config();
 const { swaggerUi, swaggerSpec } = require("./swagger");
 
 // Rutas
-const mediaRoutes = require("./Routes/media.routes");
-const generoRoutes = require("./Routes/genero.routes");
-const directorRoutes = require("./Routes/director.routes");
-const productoraRoutes = require("./Routes/productora.routes");
-const tipoRoutes = require("./Routes/tipo.routes");
+const mediaRoutes = require("./routes/media.routes");
+const generoRoutes = require("./routes/genero.routes");
+const directorRoutes = require("./routes/director.routes");
+const productoraRoutes = require("./routes/productora.routes");
+const tipoRoutes = require("./routes/tipo.routes");
 
 // Inicializar aplicación
 const app = express();
