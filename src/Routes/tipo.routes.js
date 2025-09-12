@@ -111,14 +111,15 @@ router.put("/:id", async (req, res) => {
   try {
     const tipo = await Tipo.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
+      runValidators: true
     });
     if (!tipo) {
       return res.status(404).json({ message: "Tipo no encontrado" });
     }
-    res.json(tipo);
+    res.status(200).json(tipo);
   } catch (error) {
     console.error("Error al actualizar tipo:", error);
-    res.status(500).json({ message: "Error al actualizar tipo" });
+    res.status(500).json({ message: "Error al actualizar tipo", error: error.message });
   }
 });
 
@@ -142,15 +143,16 @@ router.put("/:id", async (req, res) => {
  *         description: Tipo no encontrado
  */
 router.delete("/:id", async (req, res) => {
-  const tipo = await Tipo.findByIdAndUpdate(
-    req.params.id,
-    { estado: "Inactivo" },
-    { new: true }
-  );
-  if (!tipo) {
-    return res.status(404).json({ message: "Tipo no encontrado" });
+  try {
+    const tipo = await Tipo.findByIdAndDelete(req.params.id);
+    if (!tipo) {
+      return res.status(404).json({ message: "Tipo no encontrado" });
+    }
+    res.json({ message: "Tipo eliminado correctamente" });
+  } catch (error) {
+    console.error("Error al eliminar tipo:", error);
+    res.status(500).json({ message: "Error al eliminar tipo" });
   }
-  res.json(tipo);
 });
 
 
