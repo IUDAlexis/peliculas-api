@@ -17,8 +17,14 @@ const app = express();
 // Conectar a MongoDB Atlas
 require("./database");
 
+const corsOptions = {
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+app.use(cors(corsOptions));
+
 // Middlewares
-app.use(cors());
 app.use(express.json());
 
 // Swagger configuración
