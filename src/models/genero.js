@@ -44,6 +44,29 @@ const mongoose = require("mongoose");
  *         fecha_creacion: "2023-12-01T10:30:00.000Z"
  *         fecha_actualizacion: "2023-12-01T10:30:00.000Z"
  *         descripcion: "Películas y series con mucha acción y aventura"
+ *     GeneroInput:
+ *       type: object
+ *       required:
+ *         - nombre
+ *       properties:
+ *         nombre:
+ *           type: string
+ *           description: Nombre único del género
+ *           example: "Comedia"
+ *         estado:
+ *           type: string
+ *           enum: [Activo, Inactivo]
+ *           default: Activo
+ *           description: Estado del género
+ *           example: "Activo"
+ *         descripcion:
+ *           type: string
+ *           description: Descripción opcional del género
+ *           example: "Películas y series de humor"
+ *       example:
+ *         nombre: "Comedia"
+ *         estado: "Activo"
+ *         descripcion: "Películas y series de humor"
  */
 
 const GeneroSchema = new mongoose.Schema({

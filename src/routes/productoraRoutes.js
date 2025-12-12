@@ -1,5 +1,6 @@
 const express = require("express");
 const Productora = require("../models/productora");
+const { verifyToken, requireRole } = require("../middlewares/auth");
 const router = express.Router();
 
 /**
@@ -15,6 +16,9 @@ const router = express.Router();
  *   get:
  *     summary: Obtener todas las productoras
  *     tags: [Productoras]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Listar productoras (rol administrador o docente)
  *     responses:
  *       200:
  *         description: Lista de productoras
@@ -27,7 +31,7 @@ const router = express.Router();
  *       500:
  *         description: Error del servidor
  */
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, requireRole("administrador", "docente"), async (req, res) => {
   try {
     const productoras = await Productora.find();
     res.json(productoras);
@@ -42,6 +46,9 @@ router.get("/", async (req, res) => {
  *   get:
  *     summary: Obtener una productora por ID
  *     tags: [Productoras]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Obtener productora por ID (rol administrador o docente)
  *     parameters:
  *       - in: path
  *         name: id
@@ -61,7 +68,7 @@ router.get("/", async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, requireRole("administrador", "docente"), async (req, res) => {
   try {
     const productora = await Productora.findById(req.params.id);
     if (!productora) {
@@ -79,6 +86,9 @@ router.get("/:id", async (req, res) => {
  *   post:
  *     summary: Crear una nueva productora
  *     tags: [Productoras]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Crear productora (rol administrador)
  *     requestBody:
  *       required: true
  *       content:
@@ -95,7 +105,7 @@ router.get("/:id", async (req, res) => {
  *       400:
  *         description: Error en los datos de entrada
  */
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, requireRole("administrador"), async (req, res) => {
   try {
     const nuevaProductora = new Productora(req.body);
     await nuevaProductora.save();
@@ -111,6 +121,9 @@ router.post("/", async (req, res) => {
  *   put:
  *     summary: Actualizar una productora existente
  *     tags: [Productoras]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Actualizar productora (rol administrador)
  *     parameters:
  *       - in: path
  *         name: id
@@ -136,7 +149,7 @@ router.post("/", async (req, res) => {
  *       400:
  *         description: Error en los datos de entrada
  */
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, requireRole("administrador"), async (req, res) => {
   try {
     const productora = await Productora.findByIdAndUpdate(
       req.params.id,
@@ -158,6 +171,9 @@ router.put("/:id", async (req, res) => {
  *   delete:
  *     summary: Eliminar una productora
  *     tags: [Productoras]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Eliminar productora (rol administrador). Tipo - Eliminación física
  *     parameters:
  *       - in: path
  *         name: id
@@ -181,7 +197,7 @@ router.put("/:id", async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, requireRole("administrador"), async (req, res) => {
   try {
     const productora = await Productora.findByIdAndDelete(req.params.id);
     if (!productora) {

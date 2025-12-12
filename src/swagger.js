@@ -1,4 +1,3 @@
-// swagger.js
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
@@ -8,17 +7,29 @@ const options = {
     info: {
       title: "API Películas",
       version: "1.0.0",
-      description: "CRUD de Media, Generos, Directores, Productoras y Tipos",
+      description: "API de ejemplo con autenticación JWT y Swagger"
     },
     servers: [
-      {
-        url: "http://localhost:4000/api/v1",
-      },
+      { url: process.env.SWAGGER_SERVER_URL || "http://localhost:4000/api/v1" },
+      { url: "http://localhost:4000" }
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT"
+        }
+      }
+    }
   },
-  apis: ["./src/Routes/*.js", "./src/models/*.js"],
+  apis: ["./src/routes/*.js", "./src/models/*.js"] // apunta a tus rutas y modelos
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
-module.exports = { swaggerUi, swaggerSpec };
+function swaggerDocs(app) {
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+}
+
+module.exports = swaggerDocs;

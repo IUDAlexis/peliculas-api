@@ -39,6 +39,24 @@ const mongoose = require("mongoose");
  *         estado: "Activo"
  *         fecha_creacion: "2023-12-01T10:30:00.000Z"
  *         fecha_actualizacion: "2023-12-01T10:30:00.000Z"
+ *     DirectorInput:
+ *       type: object
+ *       required:
+ *         - nombres
+ *       properties:
+ *         nombres:
+ *           type: string
+ *           description: Nombres completos del director
+ *           example: "Christopher Nolan"
+ *         estado:
+ *           type: string
+ *           enum: [Activo, Inactivo]
+ *           default: Activo
+ *           description: Estado del director
+ *           example: "Activo"
+ *       example:
+ *         nombres: "Christopher Nolan"
+ *         estado: "Activo"
  */
 
 const DirectorSchema = new mongoose.Schema({

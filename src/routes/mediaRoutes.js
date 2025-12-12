@@ -1,5 +1,6 @@
 const express = require("express");
 const Media = require("../models/media");
+const { verifyToken, requireRole } = require("../middlewares/auth");
 const router = express.Router();
 
 /**
@@ -15,6 +16,9 @@ const router = express.Router();
  *   get:
  *     summary: Obtener todos los medios
  *     tags: [Medios]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Listar medios (rol administrador o docente)
  *     responses:
  *       200:
  *         description: Lista de medios con información poblada
@@ -25,7 +29,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/MediaPopulated'
  */
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, requireRole("administrador", "docente"), async (req, res) => {
   const media = await Media.find().populate("genero director productora tipo");
   res.json(media);
 });
@@ -36,6 +40,9 @@ router.get("/", async (req, res) => {
  *   get:
  *     summary: Obtener un medio por ID
  *     tags: [Medios]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Obtener medio por ID (rol administrador o docente)
  *     parameters:
  *       - in: path
  *         name: id
@@ -43,6 +50,7 @@ router.get("/", async (req, res) => {
  *         description: ID del medio
  *         schema:
  *           type: string
+ *         example: "507f1f77bcf86cd799439015"
  *     responses:
  *       200:
  *         description: Medio encontrado con información poblada
@@ -53,7 +61,7 @@ router.get("/", async (req, res) => {
  *       404:
  *         description: Medio no encontrado
  */
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, requireRole("administrador", "docente"), async (req, res) => {
   const media = await Media.findById(req.params.id).populate(
     "genero director productora tipo"
   );
@@ -66,6 +74,9 @@ router.get("/:id", async (req, res) => {
  *   post:
  *     summary: Crear un nuevo medio
  *     tags: [Medios]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Crear medio (rol administrador)
  *     requestBody:
  *       required: true
  *       content:
@@ -82,7 +93,7 @@ router.get("/:id", async (req, res) => {
  *       400:
  *         description: Error en los datos de entrada
  */
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, requireRole("administrador"), async (req, res) => {
   const nuevaMedia = new Media(req.body);
   await nuevaMedia.save();
   res.json(nuevaMedia);
@@ -94,6 +105,9 @@ router.post("/", async (req, res) => {
  *   put:
  *     summary: Actualizar un medio existente
  *     tags: [Medios]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Actualizar medio (rol administrador)
  *     parameters:
  *       - in: path
  *         name: id
@@ -119,7 +133,7 @@ router.post("/", async (req, res) => {
  *       400:
  *         description: Error en los datos de entrada
  */
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, requireRole("administrador"), async (req, res) => {
   const media = await Media.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
@@ -132,6 +146,9 @@ router.put("/:id", async (req, res) => {
  *   delete:
  *     summary: Eliminar un medio
  *     tags: [Medios]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Eliminar medio (rol administrador). Tipo - Eliminación física
  *     parameters:
  *       - in: path
  *         name: id
@@ -153,7 +170,7 @@ router.put("/:id", async (req, res) => {
  *       404:
  *         description: Medio no encontrado
  */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, requireRole("administrador"), async (req, res) => {
   await Media.findByIdAndDelete(req.params.id);
   res.json({ message: "Eliminado correctamente" });
 });

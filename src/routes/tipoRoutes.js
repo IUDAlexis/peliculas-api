@@ -1,5 +1,6 @@
 const express = require("express");
 const Tipo = require("../models/tipo"); // corregido
+const { verifyToken, requireRole } = require("../middlewares/auth");
 const router = express.Router();
 
 /**
@@ -15,11 +16,14 @@ const router = express.Router();
  *   get:
  *     summary: Obtener todos los tipos
  *     tags: [Tipos]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Listar tipos (rol administrador o docente)
  *     responses:
  *       200:
  *         description: Lista de tipos
  */
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, requireRole("administrador", "docente"), async (req, res) => {
   const tipos = await Tipo.find();
   res.json(tipos);
 });
@@ -30,6 +34,9 @@ router.get("/", async (req, res) => {
  *   get:
  *     summary: Obtener un tipo por ID
  *     tags: [Tipos]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Obtener tipo por ID (rol administrador o docente)
  *     parameters:
  *       - in: path
  *         name: id
@@ -43,7 +50,7 @@ router.get("/", async (req, res) => {
  *       404:
  *         description: Tipo no encontrado
  */
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, requireRole("administrador", "docente"), async (req, res) => {
   const tipo = await Tipo.findById(req.params.id);
   if (!tipo) {
     return res.status(404).json({ message: "Tipo no encontrado" });
@@ -57,6 +64,9 @@ router.get("/:id", async (req, res) => {
  *   post:
  *     summary: Crear un nuevo tipo
  *     tags: [Tipos]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Crear tipo (rol administrador)
  *     requestBody:
  *       required: true
  *       content:
@@ -69,7 +79,7 @@ router.get("/:id", async (req, res) => {
  *       500:
  *         description: Error al crear tipo
  */
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, requireRole("administrador"), async (req, res) => {
   try {
     const nuevoTipo = new Tipo(req.body);
     await nuevoTipo.save();
@@ -86,6 +96,9 @@ router.post("/", async (req, res) => {
  *   put:
  *     summary: Actualizar un tipo existente
  *     tags: [Tipos]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Actualizar tipo (rol administrador)
  *     parameters:
  *       - in: path
  *         name: id
@@ -107,7 +120,7 @@ router.post("/", async (req, res) => {
  *       500:
  *         description: Error al actualizar tipo
  */
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, requireRole("administrador"), async (req, res) => {
   try {
     const tipo = await Tipo.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -129,6 +142,9 @@ router.put("/:id", async (req, res) => {
  *   delete:
  *     summary: Eliminación lógica de un tipo
  *     tags: [Tipos]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Eliminar tipo (rol administrador). Tipo - Eliminación física
  *     parameters:
  *       - in: path
  *         name: id
@@ -142,7 +158,7 @@ router.put("/:id", async (req, res) => {
  *       404:
  *         description: Tipo no encontrado
  */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, requireRole("administrador"), async (req, res) => {
   try {
     const tipo = await Tipo.findByIdAndDelete(req.params.id);
     if (!tipo) {

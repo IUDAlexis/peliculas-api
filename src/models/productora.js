@@ -49,6 +49,34 @@ const mongoose = require("mongoose");
  *         fecha_actualizacion: "2023-12-01T10:30:00.000Z"
  *         slogan: "Entertainment for All"
  *         descripcion: "Una de las productoras más grandes de Hollywood"
+ *     ProductoraInput:
+ *       type: object
+ *       required:
+ *         - nombre
+ *       properties:
+ *         nombre:
+ *           type: string
+ *           description: Nombre único de la productora
+ *           example: "Universal Pictures"
+ *         estado:
+ *           type: string
+ *           enum: [Activo, Inactivo]
+ *           default: Activo
+ *           description: Estado de la productora
+ *           example: "Activo"
+ *         slogan:
+ *           type: string
+ *           description: Slogan o lema de la productora
+ *           example: "Movies for Everyone"
+ *         descripcion:
+ *           type: string
+ *           description: Descripción detallada de la productora
+ *           example: "Productora cinematográfica estadounidense"
+ *       example:
+ *         nombre: "Universal Pictures"
+ *         estado: "Activo"
+ *         slogan: "Movies for Everyone"
+ *         descripcion: "Productora cinematográfica estadounidense"
  */
 
 const ProductoraSchema = new mongoose.Schema({

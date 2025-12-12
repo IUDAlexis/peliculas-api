@@ -1,5 +1,6 @@
 const express = require("express");
 const Genero = require("../models/genero");
+const { verifyToken, requireRole } = require("../middlewares/auth");
 const router = express.Router();
 
 /**
@@ -15,6 +16,9 @@ const router = express.Router();
  *   get:
  *     summary: Obtener todos los géneros
  *     tags: [Géneros]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Listar géneros (rol administrador o docente)
  *     responses:
  *       200:
  *         description: Lista de géneros
@@ -25,7 +29,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Genero'
  */
-router.get("/", async (   req, res) => {
+router.get("/", verifyToken, requireRole("administrador", "docente"), async (   req, res) => {
   const generos = await Genero.find();
   res.json(generos);
 });
@@ -36,6 +40,9 @@ router.get("/", async (   req, res) => {
  *   get:
  *     summary: Obtener un género por ID
  *     tags: [Géneros]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Obtener género por ID (rol administrador o docente)
  *     parameters:
  *       - in: path
  *         name: id
@@ -53,7 +60,7 @@ router.get("/", async (   req, res) => {
  *       404:
  *         description: Género no encontrado
  */
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, requireRole("administrador", "docente"), async (req, res) => {
   const genero = await Genero.findById(req.params.id);
   res.json(genero);
 });
@@ -64,6 +71,9 @@ router.get("/:id", async (req, res) => {
  *   post:
  *     summary: Crear un nuevo género
  *     tags: [Géneros]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Crear género (rol administrador)
  *     requestBody:
  *       required: true
  *       content:
@@ -80,7 +90,7 @@ router.get("/:id", async (req, res) => {
  *       400:
  *         description: Error en los datos de entrada
  */
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, requireRole("administrador"), async (req, res) => {
   const nuevoGenero = new Genero(req.body);
   await nuevoGenero.save();
   res.json(nuevoGenero);
@@ -92,6 +102,9 @@ router.post("/", async (req, res) => {
  *   put:
  *     summary: Actualizar un género existente
  *     tags: [Géneros]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Actualizar género (rol administrador)
  *     parameters:
  *       - in: path
  *         name: id
@@ -117,7 +130,7 @@ router.post("/", async (req, res) => {
  *       400:
  *         description: Error en los datos de entrada
  */
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, requireRole("administrador"), async (req, res) => {
   const genero = await Genero.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
@@ -130,6 +143,9 @@ router.put("/:id", async (req, res) => {
  *   delete:
  *     summary: Eliminación lógica de un género
  *     tags: [Géneros]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Requiere autenticación. Permisos - Eliminar género (rol administrador). Tipo - Eliminación lógica (marca Inactivo)
  *     parameters:
  *       - in: path
  *         name: id
@@ -147,7 +163,7 @@ router.put("/:id", async (req, res) => {
  *       404:
  *         description: Género no encontrado
  */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, requireRole("administrador"), async (req, res) => {
   const genero = await Genero.findByIdAndUpdate(
     req.params.id,
     { estado: "Inactivo" },
